@@ -1,0 +1,370 @@
+/* Used in both index.html and gen_login.html */
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
+.harkness-title{
+    font-family: 'Merriweather', serif;
+    color: #333;
+    font-size: 2em;
+    font-weight: 700;
+    text-align: left;
+    margin: 30px 0;
+    animation: blink-cursor 0.75s step-end infinite;
+
+}
+
+.role-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.professor, .student {
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 200px;
+    margin: 10px;
+}
+
+.professor { 
+    background: linear-gradient(to bottom right, #ffffff, #e6e9f0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.student {
+    background: linear-gradient(to bottom right, #ffffff, #e2e8f0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.professor:hover, .student:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.role-button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+}
+
+.role-button:hover {
+    background-color: #357abd;
+}
+
+/*
+the welcome section title
+*/
+
+
+
+.logo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    max-width: 200px;
+    display: inline-block;
+}
+
+.logo img {
+    width: 30%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.school-selection, .class-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.school-selection h1, .class-selection h1 {
+    font-family: 'Merriweather', serif;
+    color: #333;
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.school-dropdown, .class-dropdown {
+    width: 250px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: 'Arial', sans-serif;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%234a90e2" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px top 50%;
+    background-size: 16px auto;
+}
+
+.school-dropdown:hover, .class-dropdown:hover {
+    border-color: #4a90e2;
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+}
+
+.school-dropdown:focus, .class-dropdown:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.3);
+}
+
+.school-dropdown option, .class-dropdown option {
+    padding: 12px;
+    font-size: 14px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Ensure class selection appears directly below school selection with proper spacing */
+.school-selection + .class-selection {
+    margin-top: 20px;
+}
+
+/* Add a container for both selections to control overall positioning */
+.selection-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 100px); /* Adjust based on your layout needs */
+    padding: 20px;
+}
+
+
+
+.copyright {
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    color: #666;
+    z-index: 1000;
+}
+
+.welcome-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.welcome-content {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.welcome-content h2 {
+    color: #333;
+    font-size: 2em;
+    margin-bottom: 20px;
+    font-family: 'Merriweather', serif;
+}
+
+.welcome-content p {
+    color: #666;
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0;
+}
+
+.feature {
+    flex: 1;
+    max-width: 300px;
+    padding: 20px;
+    background: linear-gradient(to bottom right, #ffffff, #e6e9f0);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feature h3 {
+    color: #4a90e2;
+    margin-bottom: 15px;
+    font-family: 'Merriweather', serif;
+}
+
+.cta-buttons {
+    margin-top: 40px;
+}
+
+.top-nav {
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.95), rgba(230, 233, 240, 0.95));
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(5px);
+    border-bottom: 1px solid rgba(74, 144, 226, 0.2);
+    border-radius: 10px;
+    font-family: 'Merriweather', serif;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+.top-nav:hover {
+    background: linear-gradient(to right, rgba(230, 233, 240, 0.95), rgba(255, 255, 255, 0.95));
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.top-nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.top-nav li {
+    margin: 0 20px;
+    position: relative;
+}
+
+.top-nav li a {
+    color: #333;
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.top-nav li a:hover {
+    color: #4a90e2;
+}
+
+.top-nav li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #4a90e2;
+    transition: width 0.3s ease;
+}
+
+.top-nav li a:hover::after {
+    width: 100%;
+}
+
+.nav-title {
+    font-family: 'Merriweather', serif;
+    color: #333;
+    font-size: 1.2em;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-title:hover {
+    color: #4a90e2;
+}
+/*
+the search section 
+*/
+.search-section {
+    width: 95%;
+    height: 500px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.168);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-title {
+    font-family: 'Merriweather', serif;
+    color: #333;
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: 30px;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.search-bar {
+    flex: 1;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 25px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus {
+    border-color: #fefefe;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+
+
+
+
