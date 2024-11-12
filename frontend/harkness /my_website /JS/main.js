@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const text = "Welcome to Harkness";
-    const titleElement = document.querySelector('.welcome-section .harkness-title'); // Updated selector to match index.html structure
+    const titleElement = document.querySelector('.harkness-title');
     let index = 0;
 
     function typeText() {
@@ -13,8 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     typeText();
 }); 
-
-
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     const placeholders = [
@@ -50,4 +48,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
