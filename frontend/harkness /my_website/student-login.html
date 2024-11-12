@@ -5,64 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Login</title>
     <link rel="stylesheet" href="CSS/style1.css">
+    <script src="JS/dropping.js" defer></script>
 </head>
 <body>
-    
-        <div style="width: 100%;">
-            <h1 class="harkness-title"><a href="index.html" style="text-decoration: none; color: inherit;">Harkness</a></h1>
-        </div>
-        <div class="school-selection">
+    <div class="logo">
+        <!--TODO: Add Harkness Logo-->
+    </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <nav class="top-nav">
+        <a href="index.html" class="nav-title">Harkness</a>
+        <ul>
+            <li><a href="index.html">About Us</a></li>
+            <li><a href="product.html">Product</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+    </nav>
+    <div style="width: 100%;">
+    </div>
+    <div class="school-selection">
         <h1 style="text-align: center; color: #333; margin-bottom: 20px;">Choose Your School</h1>
-        <select name="schools" id="schoolSelect" class="school-dropdown">
-            <option value="" disabled selected>Select your school</option>
-            <option value="school13">Brown University</option>
-            <option value="school9">California Institute of Technology</option>
-            <option value="school19">Carnegie Mellon University</option>
-            <option value="school8">Chicago University</option>
-            <option value="school4">Columbia University</option>
-            <option value="school14">Cornell University</option>
-            <option value="school15">Dartmouth College</option>
-            <option value="school16">Duke University</option>
-            <option value="school2">Harvard University</option>
-            <option value="school17">Johns Hopkins University</option>
-            <option value="school7">Massachusetts Institute of Technology</option>
-            <option value="school11">New York University</option>
-            <option value="school18">Northwestern University</option>
-            <option value="school1">Princeton University</option>
-            <option value="school6">University of California, Berkeley</option>
-            <option value="school10">University of California, Los Angeles</option>
-            <option value="school12">University of California, San Diego</option>
-            <option value="school20">University of Michigan</option>
-            <option value="school5">University of Pennsylvania</option>
-            <option value="school3">Yale University</option>
-        </select>
+        <div class="custom-select" id="schoolSelect">
+            <div class="select-selected">Select your school</div>
+            <div class="select-items select-hide">
+                <div data-value="brown">Brown University</div>
+                <div data-value="caltech">California Institute of Technology</div>
+                <div data-value="cmu">Carnegie Mellon University</div>
+                <div data-value="chicago">Chicago University</div>
+                <div data-value="columbia">Columbia University</div>
+                <div data-value="cornell">Cornell University</div>
+                <div data-value="dartmouth">Dartmouth College</div>
+                <div data-value="duke">Duke University</div>
+                <div data-value="harvard">Harvard University</div>
+                <div data-value="jhu">Johns Hopkins University</div>
+                <div data-value="mit">Massachusetts Institute of Technology</div>
+                <div data-value="nyu">New York University</div>
+                <div data-value="northwestern">Northwestern University</div>
+                <div data-value="princeton">Princeton University</div>
+                <div data-value="berkeley">University of California, Berkeley</div>
+                <div data-value="ucla">University of California, Los Angeles</div>
+                <div data-value="ucsd">University of California, San Diego</div>
+                <div data-value="umich">University of Michigan</div>
+                <div data-value="upenn">University of Pennsylvania</div>
+                <div data-value="yale">Yale University</div>
+            </div>
+        </div>
+        <div id="schoolLogo" class="school-logo"></div>
+        <button id="goToSchoolBtn" class="role-button" style="margin-top: 20px;">Go Study!</button>
     </div>
-    <div class="class-selection">
-        <h1>Choose Your Class</h1>
-        <select name="classes" id="classSelect" class="class-dropdown">
-            <option value="" disabled selected>Select your class</option>
-            <option value="class1">Advanced Algorithms</option>
-            <option value="class2">Artificial Intelligence</option>
-            <option value="class3">Biochemistry</option>
-            <option value="class4">Calculus</option>
-            <option value="class5">Cell Biology</option>
-            <option value="class6">Computer Architecture</option>
-            <option value="class7">Data Structures</option>
-            <option value="class8">Differential Equations</option>
-            <option value="class9">Digital Systems Design</option>
-            <option value="class10">Genetics</option>
-            <option value="class11">Linear Algebra</option>
-            <option value="class12">Machine Learning</option>
-            <option value="class13">Organic Chemistry</option>
-            <option value="class14">Physics: Electricity & Magnetism</option>
-            <option value="class15">Physics: Mechanics</option>
-            <option value="class16">Probability & Statistics</option>
-            <option value="class17">Quantum Mechanics</option>
-            <option value="class18">Software Engineering</option>
-            <option value="class19">Thermodynamics</option>
-            <option value="class20">Web Development</option>
-        </select>
-    </div>
+    <script>
+        function redirectToSchool() {
+            // Get the selected div element
+            const selectedDiv = document.querySelector('.select-selected');
+            // Get the selected school text
+            const selectedSchool = selectedDiv.textContent;
+            
+            // Map full school names to their data-value attributes
+            const schoolMap = {
+                'Brown University': 'brown',
+                'California Institute of Technology': 'caltech',
+                'Carnegie Mellon University': 'cmu',
+                'Chicago University': 'chicago', 
+                'Columbia University': 'columbia',
+                'Cornell University': 'cornell',
+                'Dartmouth College': 'dartmouth',
+                'Duke University': 'duke',
+                'Harvard University': 'harvard',
+                'Johns Hopkins University': 'jhu',
+                'Massachusetts Institute of Technology': 'mit',
+                'New York University': 'nyu',
+                'Northwestern University': 'northwestern',
+                'Princeton University': 'princeton',
+                'University of California, Berkeley': 'berkeley',
+                'University of California, Los Angeles': 'ucla',
+                'University of California, San Diego': 'ucsd',
+                'University of Michigan': 'umich',
+                'University of Pennsylvania': 'upenn',
+                'Yale University': 'yale'
+            };
+
+            if (selectedSchool && selectedSchool !== 'Select your school') {
+                const schoolCode = schoolMap[selectedSchool];
+                window.location.href = schoolCode + '.html';
+            } else {
+                alert('Please select a school');
+            }
+        }
+
+        // Add click event listener to the button
+        document.getElementById('goToSchoolBtn').addEventListener('click', redirectToSchool);
+    </script>
+    
     <div class="copyright">
         <p>&copy; 2024 Harkness. All rights reserved.</p>
     </div>
