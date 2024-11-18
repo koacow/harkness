@@ -1,0 +1,293 @@
+.class-dropdown-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.class-selection-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.class-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#classDropdown {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px;
+}
+
+#classDropdown:hover, 
+#classDropdown:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1);
+}
+
+#classDropdown option {
+    padding: 12px;
+    font-size: 16px;
+}
+
+#classDropdown option[disabled] {
+    color: #999;
+}
+
+/* Add the rest of your styles for search box, output box, etc. */
+.search-box {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Continue adding the rest of your styles... */
+.formatted-content {
+    font-family: 'Computer Modern', 'Times New Roman', serif;
+    line-height: 1.6;
+    font-size: 16px;
+    color: #333;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.formatted-content h2 {
+    font-size: 1.5em;
+    margin: 1em 0 0.5em;
+    color: #1a1a1a;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.3em;
+}
+
+.formatted-content h3 {
+    font-size: 1.3em;
+    margin: 1em 0 0.5em;
+    color: #333;
+}
+
+.formatted-content p {
+    margin: 1em 0;
+}
+
+.formatted-content ul, 
+.formatted-content ol {
+    margin: 1em 0;
+    padding-left: 2em;
+}
+
+.formatted-content li {
+    margin: 0.5em 0;
+}
+
+/* Math styling */
+.math-display {
+    display: block;
+    margin: 1em 0;
+    text-align: center;
+    font-size: 1.2em;
+    padding: 0.5em;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.math-inline {
+    display: inline-block;
+    font-family: 'Computer Modern', 'Times New Roman', serif;
+    padding: 0 4px;
+    font-style: italic;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.math-limit {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin: 0 0.2em;
+    font-style: normal;
+}
+
+.math-limit sub {
+    font-size: 0.7em;
+    line-height: 1;
+    margin-top: 0.2em;
+}
+
+.math-frac {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    font-style: normal;
+}
+
+.math-num {
+    display: block;
+    border-bottom: 1px solid;
+    padding: 0 2px;
+}
+
+.math-den {
+    display: block;
+    padding: 0 2px;
+}
+
+/* Superscript and subscript adjustments */
+sup, sub {
+    font-size: 0.75em;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* MathJax specific styling */
+.MathJax {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+}
+
+.MathJax_Display {
+    margin: 1em 0 !important;
+}
+
+.mjx-chtml {
+    font-size: 116% !important;
+}
+
+/* Add styles for theorem-like environments */
+.formatted-content .theorem,
+.formatted-content .definition,
+.formatted-content .proof {
+    margin: 1em 0;
+    padding: 0.8em;
+    border-left: 3px solid;
+    background-color: #f8f9fa;
+}
+
+.formatted-content .theorem {
+    border-color: #4a90e2;
+}
+
+.formatted-content .definition {
+    border-color: #2ecc71;
+}
+
+.formatted-content .proof {
+    border-color: #95a5a6;
+}
+
+/* Spacing for the iff symbol */
+.math-iff {
+    margin: 0 0.5em;
+    font-weight: normal;
+}
+/* Code block styling */
+.code-block-container {
+    position: relative;
+    margin: 1.5em 0;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.code-language {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 4px 8px;
+    font-size: 0.8em;
+    color: #6c757d;
+    background: #e9ecef;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 6px;
+}
+
+.code-block {
+    margin: 0;
+    padding: 1em;
+    overflow-x: auto;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+.inline-code {
+    background: #f8f9fa;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9em;
+}
+
+/* Syntax highlighting */
+.keyword { color: #d73a49; }
+.builtin { color: #005cc5; }
+.chem-keyword { color: #6f42c1; }
+.smiles-special { color: #032f62; }
+.string { color: #032f62; }
+.comment { color: #6a737d; }
+
+/* Copy button */
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    font-size: 0.8em;
+    color: #6c757d;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.code-block-container:hover .copy-button {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: #f8f9fa;
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professor Login</title>
+    <link rel="stylesheet" href="CSS/style1.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .feature {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .role-button {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .role-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <!--TODO: Add Harkness Logo-->
+    </div>
+    <nav class="top-nav">
+        <a href="index.html" class="nav-title">Harkness</a>
+        <ul>
+            <li><a href="index.html" class="active">About Us</a></li>
+            <li><a href="product.html">Product</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <main class="welcome-section">
+        <div class="welcome-content">
+            <h2>Professor Dashboard</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>Upload Documents</h3>
+                    <p>Upload course materials, assignments, and other documents for your students</p>
+                    <a href="upload.html" class="role-button" style="text-decoration: none;">Upload</a>
+                </div>
+
+                <div class="feature">
+                    <h3>View Metrics</h3>
+                    <p>View detailed analytics and performance metrics of your students</p>
+                    <a href="metrics.html" class="role-button" style="text-decoration: none;">Metrics</a>
+                </div>
+
+                <div class="feature">
+                    <h3>Grade Assignments</h3>
+                    <p>Evaluate and assign grades to student submissions and assignments</p>
+                    <a href="grade.html" class="role-button" style="text-decoration: none;">Grade</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="copyright">
+        <p>&copy; 2024 Harkness. All rights reserved.</p>
+    </div>
+
+    <script>
+        document.querySelectorAll('.feature').forEach(feature => {
+            feature.addEventListener('mouseover', () => {
+                feature.style.transform = 'scale(1.05)';
+                feature.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            });
+            feature.addEventListener('mouseout', () => {
+                feature.style.transform = 'scale(1)';
+                feature.style.boxShadow = 'none';
+            });
+        });
+
+        document.querySelectorAll('.role-button').forEach(button => {
+            button.addEventListener('mouseover', () => {
+                button.style.transform = 'translateY(-5px)';
+                button.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            });
+            button.addEventListener('mouseout', () => {
+                button.style.transform = 'translateY(0)';
+                button.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
+

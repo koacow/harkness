@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <link rel="stylesheet" href="CSS/style1.css">
+    <!-- Include any necessary CSS or libraries here -->
+</head>
+<body>
+    <div class="logo">
+        <!--TODO: Add Harkness Logo-->
+    </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <nav class="top-nav">
+            <a href="index.html" class="nav-title">Harkness</a>
+        <ul>
+            <li><a href="index.html" class="active">About Us</a></li>
+            <li><a href="product.html">Product</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+    </nav>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <!-- Remove the action and method attributes -->
+        <input type="file" id="fileInput" name="files" multiple>
+        
+        <!-- Optional: You can include your custom drag & drop area and browse button here -->
+        <div id="dragDropArea">
+            <!-- Your existing drag & drop HTML structure -->
+            <!-- This div is intentionally left empty as the drag & drop area is dynamically created in upload.js -->
+        </div>
+        
+        <!-- Upload Button -->
+        <button type="submit">Upload Now</button>
+    </form>
+    
+    <!-- Include your upload.js script -->
+    <script src="JS/upload.js"></script>
+</body>
+</html>

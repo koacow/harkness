@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Columbia University</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/style1.css">
+    <link rel="stylesheet" href="CSS/classes.css">
+    <script src="JS/LLM.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <!--TODO: Add Harkness Logo-->
+        </div>
+        <a href="index.html" class="nav-title">Harkness</a>
+    </header>
+
+    <main>
+        <div class="class-dropdown-section">
+            <div class="class-selection-container">
+                <h2 class="class-title">Select Your Class</h2>
+                <div class="class-dropdown-container">
+                    <select id="classDropdown" class="class-dropdown">
+                        <option value="" disabled selected>Choose a class...</option>
+                                                <option value="cs101">Introduction to Computer Science</option>
+                        <option value="math101">Calculus I</option>
+                        <option value="phys101">Physics I</option>
+                        <option value="chem101">General Chemistry</option>
+                        <option value="bio101">Introduction to Biology</option>
+                        <option value="eng101">English Composition</option>
+                        <option value="hist101">World History</option>
+                        <option value="econ101">Principles of Economics</option>
+                        <option value="psych101">Introduction to Psychology</option>
+                        <option value="phil101">Introduction to Philosophy</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="output-box">
+            <div class="loading-animation" hidden>
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Loading...</div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
