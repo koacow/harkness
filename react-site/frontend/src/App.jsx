@@ -17,38 +17,6 @@ function App() {
           fontFamily: "Montserrat, sans-serif",
       },
       components: {
-          MuiSwitch: {
-              defaultProps: {
-                  color: "info"
-              }
-          },
-          MuiPopover: {
-              defaultProps: {
-                  container: rootElement
-              }
-          },
-          MuiCard: {
-            styleOverrides: {
-              root: {
-                boxShadow: 'none',
-              }
-            }
-          },
-          MuiPopper: {
-              defaultProps: {
-                  container: rootElement
-              }
-          },
-          MuiDialog: {
-              defaultProps: {
-                  container: rootElement
-              }
-          },
-          MuiModal: {
-              defaultProps: {
-                  container: rootElement
-              }
-          }
       }
   }));
 
