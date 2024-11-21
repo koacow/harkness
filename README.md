@@ -1,12 +1,18 @@
 # Harkness
 
+**The team**: Mikihiro Osada, Khoa Cao, Ethan Ambrossi, Kelly Lukito
+
+## About Harkness
+
+<!-- TODO: add project description -->
+
 ## Get setup
 
 ### Clone the repo
 
 ```sh
 git clone git@github.com:koacow/harkness.git
-cd /harkness
+cd /harkness/react-site
 ```
 
 ### Frontend setup
