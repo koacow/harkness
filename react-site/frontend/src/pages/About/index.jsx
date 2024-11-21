@@ -26,11 +26,11 @@ export default function About(){
                 Welcome to Harkness.
             </Typography>
             <Paper 
-                className='flex flex-col p-4 h-96 w-4/5 text-center rounded-lg'
+                className='flex flex-col p-4 h-96 w-5/6 text-center rounded-lg'
                 elevation={5}
             >
                 <Typography 
-                    variant='h2'
+                    variant='h3'
                 >
                     Ask more and Learn more.
                 </Typography>
