@@ -1,7 +1,8 @@
 const chatRouter = require('express').Router();
 const OpenAI = require('openai');
+require('dotenv').config();
 const openai = new OpenAI({
-    apiKey: process.env.VITE_OPENAI_API_KEY
+    apiKey: process.env.OPENAI_API_KEY
 });
 
 chatRouter.post('/', async (req, res) => {
