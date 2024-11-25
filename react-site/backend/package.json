@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "nodemon index.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.46.1",
@@ -15,6 +15,7 @@
     "express": "^4.21.1",
     "langchain": "^0.0.200",
     "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.7",
     "openai": "^4.71.1"
   },
   "keywords": [],
