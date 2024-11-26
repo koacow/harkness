@@ -30,7 +30,7 @@ chatRouter.post('/', async (req, res) => {
         }
     } catch(e) {
         console.error('Error from Supabase:', e);
-        res.status(500).json({ error: 'Failed to process your request.' });
+        return res.status(500).json({ error: 'Failed to process your request.' });
     }
     try {
         const completion = await openai.chat.completions.create({
@@ -38,10 +38,10 @@ chatRouter.post('/', async (req, res) => {
             messages: req.body.text
         });
         // TODO: Save the chatbot's response to the database
-        res.status(200).json(completion.choices[0].message);
+        return res.status(200).json(completion.choices[0].message);
     } catch (error) {
         console.error('Error from OpenAI:', error);
-        res.status(500).json({ error: 'Failed to process your request.' });
+        return res.status(500).json({ error: 'Failed to process your request.' });
     }
 });
 
@@ -64,10 +64,10 @@ chatRouter.get('/', async (req, res) => {
         if (error) {
             throw error;
         }
-        res.status(200).json(data);
+        return res.status(200).json(data);
     } catch(e) {
         console.error('Error from Supabase:', e);
-        res.status(500).json({ error: 'Failed to process your request.' });
+        return res.status(500).json({ error: 'Failed to process your request.' });
     }
 });
 
@@ -91,10 +91,10 @@ chatRouter.post('/newchat', async (req, res) => {
         if (error) {
             throw error;
         }
-        res.status(200).json(data);
+        return es.status(200).json(data);
     } catch(e) {
         console.error('Error from Supabase:', e);
-        res.status(500).json({ error: 'Failed to process your request.' });
+        return res.status(500).json({ error: 'Failed to process your request.' });
     }
 });
 
@@ -116,16 +116,16 @@ chatRouter.delete('/', async (req, res) => {
         .eq('id', chatId)
         .select();
         if (!data) {
-            res.status(404).json({ error: 'Chat not found.' });
+            return res.status(404).json({ error: 'Chat not found.' });
         } else if (error) {
             throw error;
         }
         else {
-            res.status(200).json({ message: 'Chat deleted.' });
+            return res.status(200).json({ message: 'Chat deleted.' });
         }
     } catch(e) {
         console.error('Error from Supabase:', e);
-        res.status(500).json({ error: 'Failed to process your request.' });
+        return res.status(500).json({ error: 'Failed to process your request.' });
     }
 });
 
