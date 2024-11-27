@@ -3,16 +3,22 @@ require('dotenv').config();
 
 const courseRouter = require('express').Router();
 
+// TODO: add input validation for all routes and assign default values where necessary
+
 /**
  * GET /api/course
  * @summary Gets all course ids and roles for a user
  * @tags course
  * @param {string} userId.query.required - The user ID
  * @return {object} 200 - List of courses
+ * @return {object} 400 - Bad request
  * @return {object} 500 - An error occurred
  */
 courseRouter.get('/', async (req, res) => {
     const { userId } = req.query;
+    if (!userId) {
+        return res.status(400).json({ error: 'Missing required parameter(s): userId' });
+    }
     try{
         const { data, error} = await supabase
         .from('courses_users')
@@ -41,7 +47,10 @@ courseRouter.get('/', async (req, res) => {
  * @return {object} 500 - An error occurred
  */
 courseRouter.post('/newcourse', async (req, res) => {
-    const { userId, courseTitle, courseDescription, startDate, endDate } = req.body;
+    const { userId, courseTitle, courseDescription = '', startDate, endDate } = req.body;
+    if (!userId || !courseTitle || !startDate || !endDate) {
+        return res.status(400).json({ error: 'Missing required parameter(s): userId, courseTitle, startDate, endDate' });
+    }
     try {
         const { data: courseData, error: courseCreateError } = await supabase
         .from('course')
@@ -96,6 +105,9 @@ courseRouter.post('/newcourse', async (req, res) => {
  */
 courseRouter.put('/', async (req, res) => {
     const { courseId, userId, courseTitle, courseDescription, startDate, endDate } = req.body;
+    if (!courseId || !userId || !courseTitle || !courseDescription || !startDate || !endDate) {
+        return res.status(400).json({ error: 'Missing required parameter(s): courseId, userId, courseTitle, courseDescription, startDate, endDate' });
+    }
     try {
         const { data: courseUserReference, error: courseFindError } = await supabase
         .from('courses_users')
@@ -147,6 +159,9 @@ courseRouter.put('/', async (req, res) => {
  */
 courseRouter.delete('/', async (req, res) => {
     const { courseId, userId } = req.query;
+    if (!courseId || !userId) {
+        return res.status(400).json({ error: 'Missing required parameter(s): courseId, userId' });
+    }
     try {
         const { data, error: courseFindError } = await supabase
         .from('courses_users')
@@ -193,6 +208,9 @@ courseRouter.delete('/', async (req, res) => {
 
 courseRouter.post('/join', async (req, res) => {
     const { courseId, userId, isInstructor } = req.body;
+    if (!courseId || !userId || !isInstructor) {
+        return res.status(400).json({ error: 'Missing required parameter(s): courseId, userId, isInstructor' });
+    }
     try {
         const { data: courseData, error: courseFindError } = await supabase
         .from('course')
