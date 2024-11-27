@@ -173,5 +173,60 @@ courseRouter.delete('/', async (req, res) => {
     }
 });
 
+/**
+ * POST /api/course/join
+ * @summary Adds a user to a course
+ * @tags course
+ * @param {string} courseId.body.required - The course ID
+ * @param {string} userId.body.required - The user ID
+ * @param {boolean} isInstructor.body.required - Whether the user is an instructor
+ * @return {object} 200 - The course ID
+ * @return {object} 500 - An error occurred
+ * @return {object} 404 - Not found
+ * @return {object} 400 - Bad request
+ * @return {object} 500 - An error occurred
+ */
+
+courseRouter.post('/join', async (req, res) => {
+    const { courseId, userId, isInstructor } = req.body;
+    try {
+        const { data: courseData, error: courseFindError } = await supabase
+        .from('course')
+        .select()
+        .eq('id', courseId);
+        if (courseFindError) {
+            throw courseFindError;
+        }
+        if (!courseData) {
+            return res.status(404).json({ error: 'Course not found.' });
+        } else if (error) {
+            throw error;
+        }
+        const { data: courseUserData, error: courseUserFindError } = await supabase
+        .from('auth.users')
+        .select('id')
+        .eq('id', userId);
+        if (courseUserFindError) {
+            throw courseUserFindError;
+        }
+        if (!courseUserData) {
+            return res.status(404).json({ error: 'User not found.' });
+        } else if (error) {
+            throw error;
+        }
+        const { error: courseUserInsertError } = await supabase
+        .from('courses_users')
+        .insert([
+            { course_id: courseId, user_id: userId, is_instructor: isInstructor }
+        ]);
+        if (courseUserInsertError) {
+            throw courseUserInsertError;
+        }
+        return res.status(200).json(data);
+    } catch(e) {
+        console.error('Error from Supabase:', e);
+        return res.status(500).json({ error: 'Failed to process your request.' });
+    }
+})
 
 module.exports = courseRouter;
