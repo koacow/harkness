@@ -3,8 +3,6 @@ require('dotenv').config();
 
 const courseRouter = require('express').Router();
 
-// TODO: add input validation for all routes and assign default values where necessary
-
 /**
  * GET /api/course
  * @summary Gets all course ids and roles for a user
