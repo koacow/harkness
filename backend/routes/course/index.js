@@ -9,10 +9,14 @@ const courseRouter = require('express').Router();
  * @tags course
  * @param {string} userId.query.required - The user ID
  * @return {object} 200 - List of courses
+ * @return {object} 400 - Bad request
  * @return {object} 500 - An error occurred
  */
 courseRouter.get('/', async (req, res) => {
     const { userId } = req.query;
+    if (!userId) {
+        return res.status(400).json({ error: 'Missing required parameter(s): userId' });
+    }
     try{
         const { data, error} = await supabase
         .from('courses_users')
@@ -34,16 +38,19 @@ courseRouter.get('/', async (req, res) => {
  * @tags course
  * @param {string} userId.body.required - The user ID
  * @param {string} courseTitle.body.required - The course name
- * @param {string} courseDescription.body.required - The course description
+ * @param {string} courseDescription.body.optional - The course description (default: '')
  * @param {string} startDate.body.required - The course start date
  * @param {string} endDate.body.required - The course end date
  * @return {object} 200 - The course ID
  * @return {object} 500 - An error occurred
  */
 courseRouter.post('/newcourse', async (req, res) => {
-    const { userId, courseTitle, courseDescription } = req.body;
+    const { userId, courseTitle, courseDescription = '', startDate, endDate } = req.body;
+    if (!userId || !courseTitle || !startDate || !endDate) {
+        return res.status(400).json({ error: 'Missing required parameter(s): userId, courseTitle, startDate, endDate' });
+    }
     try {
-        const { data, error } = await supabase
+        const { data: courseData, error: courseCreateError } = await supabase
         .from('course')
         .insert([
             { 
@@ -56,16 +63,19 @@ courseRouter.post('/newcourse', async (req, res) => {
             }
         ])
         .select();
-        if (error) {
-            throw error;
+        if (courseCreateError) {
+            throw courseCreateError;
         }
-        const courseId = data[0].id;
-        await supabase
+        const courseId = courseData[0].id;
+        const { courseJoinTableCreateError} = await supabase
         .from('courses_users')
         .insert([
             { course_id: courseId, user_id: userId, is_instructor: true }
         ])
         .select();
+        if (courseJoinTableCreateError) {
+            throw courseJoinTableCreateError;
+        }
         return res.status(200).json(data);
     }
     catch(e) {
@@ -93,8 +103,11 @@ courseRouter.post('/newcourse', async (req, res) => {
  */
 courseRouter.put('/', async (req, res) => {
     const { courseId, userId, courseTitle, courseDescription, startDate, endDate } = req.body;
+    if (!courseId || !userId || !courseTitle || !courseDescription || !startDate || !endDate) {
+        return res.status(400).json({ error: 'Missing required parameter(s): courseId, userId, courseTitle, courseDescription, startDate, endDate' });
+    }
     try {
-        const { data, error: courseFindError } = await supabase
+        const { data: courseUserReference, error: courseFindError } = await supabase
         .from('courses_users')
         .select('is_instructor')
         .eq('course_id', courseId)
@@ -102,14 +115,14 @@ courseRouter.put('/', async (req, res) => {
         if (courseFindError) {
             throw courseFindError;
         }
-        if (!data) {
+        if (!courseUserReference) {
             return res.status(404).json({ error: 'Course not found.' });
-        } else if (error) {
-            throw error;
-        } else if (!data[0].is_instructor) {
+        } else if (courseFindError) {
+            throw courseFindError;
+        } else if (!courseUserReference[0].is_instructor) {
             return res.status(401).json({ error: 'Unauthorized.' });
         }
-        const { error: courseUpdateError } = await supabase
+        const { data: updatedCourseData, error: courseUpdateError } = await supabase
         .from('course')
         .update([
             { 
@@ -119,11 +132,12 @@ courseRouter.put('/', async (req, res) => {
                 end_date: endDate
             }
         ])
-        .eq('id', courseId);
+        .eq('id', courseId)
+        .select('id');
         if (courseUpdateError) {
             throw courseUpdateError;
         }
-        res.status(200).json(data);
+        res.status(200).json(updatedCourseData[0].id);
     } catch(e) {
         console.error('Error from Supabase:', e);
         res.status(500).json({ error: 'Failed to process your request.' });
@@ -143,6 +157,9 @@ courseRouter.put('/', async (req, res) => {
  */
 courseRouter.delete('/', async (req, res) => {
     const { courseId, userId } = req.query;
+    if (!courseId || !userId) {
+        return res.status(400).json({ error: 'Missing required parameter(s): courseId, userId' });
+    }
     try {
         const { data, error: courseFindError } = await supabase
         .from('courses_users')
@@ -152,12 +169,12 @@ courseRouter.delete('/', async (req, res) => {
         if (courseFindError) {
             throw courseFindError;
         }
-        if (!data) {
+        if (!data[0]) {
             return res.status(404).json({ error: 'Course not found.' });
-        } else if (error) {
-            throw error;
+        } else if (courseFindError) {
+            throw courseFindError;
         } else if (!data[0].is_instructor) {
-            return es.status(401).json({ error: 'Unauthorized.' });
+            return res.status(401).json({ error: 'Unauthorized.' });
         }
         const { error: courseDeleteError } = await supabase
         .from('course')
@@ -173,5 +190,63 @@ courseRouter.delete('/', async (req, res) => {
     }
 });
 
+/**
+ * POST /api/course/join
+ * @summary Adds a user to a course
+ * @tags course
+ * @param {string} courseId.body.required - The course ID
+ * @param {string} userId.body.required - The user ID
+ * @param {boolean} isInstructor.body.required - Whether the user is an instructor
+ * @return {object} 200 - The course ID
+ * @return {object} 500 - An error occurred
+ * @return {object} 404 - Not found
+ * @return {object} 400 - Bad request
+ * @return {object} 500 - An error occurred
+ */
+
+courseRouter.post('/join', async (req, res) => {
+    const { courseId, userId, isInstructor } = req.body;
+    if (!courseId || !userId || !isInstructor) {
+        return res.status(400).json({ error: 'Missing required parameter(s): courseId, userId, isInstructor' });
+    }
+    try {
+        const { data: courseData, error: courseFindError } = await supabase
+        .from('course')
+        .select()
+        .eq('id', courseId);
+        if (courseFindError) {
+            throw courseFindError;
+        }
+        if (!courseData) {
+            return res.status(404).json({ error: 'Course not found.' });
+        } else if (courseFindError) {
+            throw courseFindError;
+        }
+        const { data: userData, error: userFindError } = await supabase
+        .from('users')
+        .select('id')
+        .eq('id', userId);
+        if (userFindError) {
+            throw userFindError;
+        }
+        if (!userData) {
+            return res.status(404).json({ error: 'User not found.' });
+        } else if (userFindError) {
+            throw userFindError;
+        }
+        const { error: courseUserInsertError } = await supabase
+        .from('courses_users')
+        .insert([
+            { course_id: courseId, user_id: userId, is_instructor: isInstructor }
+        ]);
+        if (courseUserInsertError) {
+            throw courseUserInsertError;
+        }
+        return res.status(200).json(courseData);
+    } catch(e) {
+        console.error('Error from Supabase:', e);
+        return res.status(500).json({ error: 'Failed to process your request.' });
+    }
+})
 
 module.exports = courseRouter;
