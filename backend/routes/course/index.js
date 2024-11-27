@@ -34,16 +34,16 @@ courseRouter.get('/', async (req, res) => {
  * @tags course
  * @param {string} userId.body.required - The user ID
  * @param {string} courseTitle.body.required - The course name
- * @param {string} courseDescription.body.required - The course description
+ * @param {string} courseDescription.body.optional - The course description (default: '')
  * @param {string} startDate.body.required - The course start date
  * @param {string} endDate.body.required - The course end date
  * @return {object} 200 - The course ID
  * @return {object} 500 - An error occurred
  */
 courseRouter.post('/newcourse', async (req, res) => {
-    const { userId, courseTitle, courseDescription } = req.body;
+    const { userId, courseTitle, courseDescription, startDate, endDate } = req.body;
     try {
-        const { data, error } = await supabase
+        const { data: courseData, error: courseCreateError } = await supabase
         .from('course')
         .insert([
             { 
@@ -56,16 +56,19 @@ courseRouter.post('/newcourse', async (req, res) => {
             }
         ])
         .select();
-        if (error) {
-            throw error;
+        if (courseCreateError) {
+            throw courseCreateError;
         }
-        const courseId = data[0].id;
-        await supabase
+        const courseId = courseData[0].id;
+        const { courseJoinTableCreateError} = await supabase
         .from('courses_users')
         .insert([
             { course_id: courseId, user_id: userId, is_instructor: true }
         ])
         .select();
+        if (courseJoinTableCreateError) {
+            throw courseJoinTableCreateError;
+        }
         return res.status(200).json(data);
     }
     catch(e) {
@@ -94,7 +97,7 @@ courseRouter.post('/newcourse', async (req, res) => {
 courseRouter.put('/', async (req, res) => {
     const { courseId, userId, courseTitle, courseDescription, startDate, endDate } = req.body;
     try {
-        const { data, error: courseFindError } = await supabase
+        const { data: courseUserReference, error: courseFindError } = await supabase
         .from('courses_users')
         .select('is_instructor')
         .eq('course_id', courseId)
@@ -102,14 +105,14 @@ courseRouter.put('/', async (req, res) => {
         if (courseFindError) {
             throw courseFindError;
         }
-        if (!data) {
+        if (!courseUserReference) {
             return res.status(404).json({ error: 'Course not found.' });
-        } else if (error) {
-            throw error;
-        } else if (!data[0].is_instructor) {
+        } else if (courseFindError) {
+            throw courseFindError;
+        } else if (!courseUserReference[0].is_instructor) {
             return res.status(401).json({ error: 'Unauthorized.' });
         }
-        const { error: courseUpdateError } = await supabase
+        const { data: updatedCourseData, error: courseUpdateError } = await supabase
         .from('course')
         .update([
             { 
@@ -119,11 +122,12 @@ courseRouter.put('/', async (req, res) => {
                 end_date: endDate
             }
         ])
-        .eq('id', courseId);
+        .eq('id', courseId)
+        .select('id');
         if (courseUpdateError) {
             throw courseUpdateError;
         }
-        res.status(200).json(data);
+        res.status(200).json(updatedCourseData[0].id);
     } catch(e) {
         console.error('Error from Supabase:', e);
         res.status(500).json({ error: 'Failed to process your request.' });
@@ -152,12 +156,12 @@ courseRouter.delete('/', async (req, res) => {
         if (courseFindError) {
             throw courseFindError;
         }
-        if (!data) {
+        if (!data[0]) {
             return res.status(404).json({ error: 'Course not found.' });
-        } else if (error) {
-            throw error;
+        } else if (courseFindError) {
+            throw courseFindError;
         } else if (!data[0].is_instructor) {
-            return es.status(401).json({ error: 'Unauthorized.' });
+            return res.status(401).json({ error: 'Unauthorized.' });
         }
         const { error: courseDeleteError } = await supabase
         .from('course')
@@ -199,20 +203,20 @@ courseRouter.post('/join', async (req, res) => {
         }
         if (!courseData) {
             return res.status(404).json({ error: 'Course not found.' });
-        } else if (error) {
-            throw error;
+        } else if (courseFindError) {
+            throw courseFindError;
         }
-        const { data: courseUserData, error: courseUserFindError } = await supabase
-        .from('auth.users')
+        const { data: userData, error: userFindError } = await supabase
+        .from('users')
         .select('id')
         .eq('id', userId);
-        if (courseUserFindError) {
-            throw courseUserFindError;
+        if (userFindError) {
+            throw userFindError;
         }
-        if (!courseUserData) {
+        if (!userData) {
             return res.status(404).json({ error: 'User not found.' });
-        } else if (error) {
-            throw error;
+        } else if (userFindError) {
+            throw userFindError;
         }
         const { error: courseUserInsertError } = await supabase
         .from('courses_users')
@@ -222,7 +226,7 @@ courseRouter.post('/join', async (req, res) => {
         if (courseUserInsertError) {
             throw courseUserInsertError;
         }
-        return res.status(200).json(data);
+        return res.status(200).json(courseData);
     } catch(e) {
         console.error('Error from Supabase:', e);
         return res.status(500).json({ error: 'Failed to process your request.' });
