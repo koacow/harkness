@@ -18,15 +18,18 @@ const openai = new OpenAI({
  */
 chatRouter.post('/', async (req, res) => {
     const { text, chatId, userId } = req.body;
+    if (!text || !chatId || !userId) {
+        return res.status(400).json({ error: 'Missing required parameter(s): text, chatId, userId' });
+    }
     try{
-        const { data, error } = await supabase
+        const { error: userMessageSaveError } = await supabase
         .from('chat_text')
         .insert([
             { chat_id: chatId, user_id: userId, text: text }
         ])
         .select();
-        if (error){
-            throw error;
+        if (userMessageSaveError){
+            throw userMessageSaveError;
         }
     } catch(e) {
         console.error('Error from Supabase:', e);
@@ -37,7 +40,14 @@ chatRouter.post('/', async (req, res) => {
             model: "gpt-4o-mini",
             messages: req.body.text
         });
-        // TODO: Save the chatbot's response to the database
+        const { error: chatbotMessageSaveError } = await supabase
+        .from('chat_bot_text')
+        .insert([
+            { chat_id: chatId, text: completion.choices[0].message }
+        ]);
+        if (chatbotMessageSaveError){
+            throw chatbotMessageSaveError
+        }
         return res.status(200).json(completion.choices[0].message);
     } catch (error) {
         console.error('Error from OpenAI:', error);
@@ -55,6 +65,9 @@ chatRouter.post('/', async (req, res) => {
  */
 chatRouter.get('/', async (req, res) => {
     const { chatId } = req.query;
+    if (!chatId) {
+        return res.status(400).json({ error: 'Missing required parameter: chatId' });
+    }
     try {
         const { data, error } = await supabase
         .from('chat_text')
@@ -76,16 +89,20 @@ chatRouter.get('/', async (req, res) => {
  * @summary This endpoint is used to create a new chat with the chatbot.
  * @tags chat
  * @param {string} userId.body.required - The user ID
+ * @param {string} courseId.body.required - The course ID
  * @return {object} 200 - The chat ID
  * @return {object} 500 - An error occurred
  */
 chatRouter.post('/newchat', async (req, res) => {
-    const { userId } = req.body;
+    const { userId, courseId } = req.body;
+    if (!userId || !courseId) {
+        return res.status(400).json({ error: 'Missing required parameter(s): userId, courseId' });
+    }
     try {
         const { data, error } = await supabase
         .from('chat')
         .insert([
-            { id: crypto.randomUUID(), created_at: new Date().toISOString(), user_id: userId }
+            { id: crypto.randomUUID(), created_at: new Date().toISOString(), user_id: userId, course_id: courseId }
         ])
         .select();
         if (error) {
@@ -109,6 +126,9 @@ chatRouter.post('/newchat', async (req, res) => {
  */
 chatRouter.delete('/', async (req, res) => {
     const { chatId } = req.query;
+    if (!chatId) {
+        return res.status(400).json({ error: 'Missing required parameter: chatId' });
+    }
     try {
         const { data, error } = await supabase
         .from('chat')
