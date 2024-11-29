@@ -22,14 +22,14 @@ chatRouter.post('/', async (req, res) => {
         return res.status(400).json({ error: 'Missing required parameter(s): text, chatId, userId' });
     }
     try{
-        const { data, error } = await supabase
+        const { error: userMessageSaveError } = await supabase
         .from('chat_text')
         .insert([
             { chat_id: chatId, user_id: userId, text: text }
         ])
         .select();
-        if (error){
-            throw error;
+        if (userMessageSaveError){
+            throw userMessageSaveError;
         }
     } catch(e) {
         console.error('Error from Supabase:', e);
@@ -40,7 +40,14 @@ chatRouter.post('/', async (req, res) => {
             model: "gpt-4o-mini",
             messages: req.body.text
         });
-        // TODO: Save the chatbot's response to the database
+        const { error: chatbotMessageSaveError } = await supabase
+        .from('chat_bot_text')
+        .insert([
+            { chat_id: chatId, text: completion.choices[0].message }
+        ]);
+        if (chatbotMessageSaveError){
+            throw chatbotMessageSaveError
+        }
         return res.status(200).json(completion.choices[0].message);
     } catch (error) {
         console.error('Error from OpenAI:', error);
