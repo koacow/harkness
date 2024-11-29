@@ -76,7 +76,7 @@ courseRouter.post('/newcourse', async (req, res) => {
         if (courseJoinTableCreateError) {
             throw courseJoinTableCreateError;
         }
-        return res.status(200).json(data);
+        return res.status(200).json(courseData[0]);
     }
     catch(e) {
         console.error('Error from Supabase:', e);
@@ -115,7 +115,7 @@ courseRouter.put('/', async (req, res) => {
         if (courseFindError) {
             throw courseFindError;
         }
-        if (!courseUserReference) {
+        if (!courseUserReference[0]) {
             return res.status(404).json({ error: 'Course not found.' });
         } else if (courseFindError) {
             throw courseFindError;
@@ -137,7 +137,7 @@ courseRouter.put('/', async (req, res) => {
         if (courseUpdateError) {
             throw courseUpdateError;
         }
-        res.status(200).json(updatedCourseData[0].id);
+        res.status(200).json(updatedCourseData[0]);
     } catch(e) {
         console.error('Error from Supabase:', e);
         res.status(500).json({ error: 'Failed to process your request.' });
@@ -217,7 +217,7 @@ courseRouter.post('/join', async (req, res) => {
         if (courseFindError) {
             throw courseFindError;
         }
-        if (!courseData) {
+        if (!courseData[0]) {
             return res.status(404).json({ error: 'Course not found.' });
         } else if (courseFindError) {
             throw courseFindError;
@@ -229,7 +229,7 @@ courseRouter.post('/join', async (req, res) => {
         if (userFindError) {
             throw userFindError;
         }
-        if (!userData) {
+        if (!userData[0]) {
             return res.status(404).json({ error: 'User not found.' });
         } else if (userFindError) {
             throw userFindError;
@@ -242,11 +242,54 @@ courseRouter.post('/join', async (req, res) => {
         if (courseUserInsertError) {
             throw courseUserInsertError;
         }
-        return res.status(200).json(courseData);
+        return res.status(200).json({ message: 'User added to course.' });
     } catch(e) {
         console.error('Error from Supabase:', e);
         return res.status(500).json({ error: 'Failed to process your request.' });
     }
-})
+});
+
+/**
+ * DELETE /api/course/leave
+ * @summary Removes a user from a course
+ * @tags course
+ * @param {string} courseId.body.required - The course ID
+ * @param {string} userId.body.required - The user ID
+ * @return {object} 200 - The course ID
+ * @return {object} 400 - Bad request
+ * @return {object} 404 - Not found
+ * @return {object} 500 - An error occurred
+ */
+courseRouter.delete('/leave', async (req, res) => {
+    const { courseId, userId } = req.query;
+    if (!courseId || !userId) {
+        return res.status(400).json({ error: 'Missing required parameter(s): courseId, userId' });
+    }
+    try {
+        const { data: enrollmentData, error: enrollmentDataFindError } = await supabase
+        .from('courses_users')
+        .select()
+        .eq('course_id', courseId)
+        .eq('user_id', userId);
+        if (enrollmentDataFindError) {
+            throw enrollmentDataFindError;
+        }
+        if (!enrollmentData[0]) {
+            return res.status(404).json({ error: 'Enrollment record not found.' });
+        }
+        const { error: courseUserDeleteError } = await supabase
+        .from('courses_users')
+        .delete()
+        .eq('course_id', courseId)
+        .eq('user_id', userId);
+        if (courseUserDeleteError) {
+            throw courseUserDeleteError;
+        }
+        return res.status(200).json({ message: 'User removed from course.' });
+    } catch(e) {
+        console.error('Error from Supabase:', e);
+        return res.status(500).json({ error: 'Failed to process your request.' });
+    }
+});
 
 module.exports = courseRouter;
