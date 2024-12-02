@@ -1,6 +1,6 @@
 # Harkness
 
-**The team**: Mikihiro Osada, Khoa Cao, Ethan Ambrossi, Kelly Lukito
+**The team**: Mikihiro Osada, Khoa Cao, Ethan Ambrossi, Kelly Lukito, Ayaan Rege
 
 ## About Harkness
 
