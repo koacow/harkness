@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import validator from 'validator';
-import {supabase} from './supabase';
+import { supabase } from './supabase';
 
 /**
  * Validate email address
@@ -9,20 +9,16 @@ import {supabase} from './supabase';
  * @throws {Error} - Throws an error if email is invalid
  */
 const validateEmail = (email) => {
-    // Trim the email and normalize it
     const trimmedEmail = validator.trim(email);
     
-    // Check if email is empty
     if (validator.isEmpty(trimmedEmail)) {
         throw new Error('Email is required');
     }
     
-    // Validate email format
     if (!validator.isEmail(trimmedEmail)) {
         throw new Error('Invalid email format');
     }
     
-    // Additional email validations
     if (trimmedEmail.length > 254) {
         throw new Error('Email is too long');
     }
@@ -36,20 +32,16 @@ const validateEmail = (email) => {
  * @throws {Error} - Throws an error if password doesn't meet criteria
  */
 const validatePassword = (password) => {
-    // Trim the password
     const trimmedPassword = validator.trim(password);
     
-    // Check if password is empty
     if (validator.isEmpty(trimmedPassword)) {
         throw new Error('Password is required');
     }
     
-    // Password strength requirements
     if (trimmedPassword.length < 8) {
         throw new Error('Password must be at least 8 characters long');
     }
     
-    // Check for at least one uppercase, one lowercase, one number, and one special character
     if (
         !/[A-Z]/.test(trimmedPassword) || 
         !/[a-z]/.test(trimmedPassword) || 
@@ -72,11 +64,9 @@ const validatePassword = (password) => {
  */
 export const registerUser = async (email, password, firstName, lastName) => {
     try {
-        // Validate inputs
         const validatedEmail = validateEmail(email);
         const validatedPassword = validatePassword(password);
         
-        // Sanitize email
         const sanitizedEmail = validator.normalizeEmail(validatedEmail, {
             gmail_remove_dots: false,
             gmail_remove_subaddress: false
@@ -88,29 +78,21 @@ export const registerUser = async (email, password, firstName, lastName) => {
         const { data, error } = await supabase.auth.signUp({
             email: sanitizedEmail,
             password: validatedPassword,
-          })
+          });
          
         // add users data to database
-        const { userdata, userdataerror } = await supabase.from('users').insert([
+        const { data: userData, error: userDataError } = await supabase.from('users').insert([
             { first_name: firstName, last_name: lastName }
-        ]).select()
+        ]).select();
         
         // Check for auth errors
         if (error) {
             throw new Error(error.message || 'Registration failed');
         }
-        if (userdataerror) {
-            throw new Error(userdatarror.message || 'Registration failed');
+        if (userDataError) {
+            throw new Error(userDataError.message || 'Registration failed');
         }
-        else {
-            console.log(userdata)
-
-        }
-
-        
-
-        
-        return data[0]; // Return the newly created user data
+        return data[0]; 
     } catch (error) {
         // Log the error (use a proper logging mechanism in production)
         console.error('Registration Error:', error.message);
@@ -128,23 +110,19 @@ export const registerUser = async (email, password, firstName, lastName) => {
  */
 export const signInWithEmail = async (email, password) => {
     try {
-        // Validate inputs
         const validatedEmail = validateEmail(email);
         const validatedPassword = validatePassword(password);
         
-        // Sanitize email
         const sanitizedEmail = validator.normalizeEmail(validatedEmail, {
             gmail_remove_dots: false,
             gmail_remove_subaddress: false
         });
         
-        // Attempt login
         const { data, error } = await supabase.auth.signInWithPassword({
             email: sanitizedEmail,
             password: validatedPassword
         });
         
-        // Check for login errors
         if (error) {
             throw new Error(error.message || 'Login failed');
         }
