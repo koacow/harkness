@@ -5,6 +5,39 @@ const courseRouter = require('express').Router();
 
 /**
  * GET /api/course
+ * @summary Gets a course by ID
+ * @tags course
+ * @param {string} courseId.query.required - The course ID
+ * @return {object} 200 - The course
+ * @return {object} 400 - Bad request
+ * @return {object} 404 - Not found
+ * @return {object} 500 - An error occurred
+ */
+courseRouter.get('/', async (req, res) => {
+    const { courseId } = req.query;
+    if (!courseId) {
+        return res.status(400).json({ error: 'Missing required parameter(s): courseId' });
+    }
+    try {
+        const { data, error } = await supabase
+        .from('course')
+        .select()
+        .eq('id', courseId);
+        if (error) {
+            throw error;
+        }
+        if (!data[0]) {
+            return res.status(404).json({ error: 'Course not found.' });
+        }
+        return res.status(200).json(data[0]);
+    } catch(e) {
+        console.error('Error from Supabase:', e);
+        return res.status(500).json({ error: 'Failed to process your request.' });
+    }
+});
+
+/**
+ * GET /api/course/mycourses
  * @summary Gets all course ids and roles for a user
  * @tags course
  * @param {string} userId.query.required - The user ID
